@@ -38,17 +38,17 @@
             _marginL = 1, _gutterL = 2;
         } else if ([UIScreen mainScreen].bounds.size.height == 480) {
             // iPhone 3.5 inch
-            _columns = 1, _columnsL = 3;
+            _columns = 1, _columnsL = 4;
             _margin = 0, _gutter = 1;
             _marginL = 1, _gutterL = 2;
         } else if([UIScreen mainScreen].bounds.size.height == 667) {
             // iPhone 6
-            _columns = 4, _columnsL = 7;
+            _columns = 1, _columnsL = 4;
             _margin = 0, _gutter = 1;
             _marginL = 1, _gutterL = 2;
         } else if([UIScreen mainScreen].bounds.size.height == 736) {
             // iPHone 6+
-            _columns = 5, _columnsL = 8;
+            _columns = 1, _columnsL = 4;
             _margin = 0, _gutter = 1;
             _marginL = 1, _gutterL = 2;
         } else {
