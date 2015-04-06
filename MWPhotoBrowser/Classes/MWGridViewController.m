@@ -106,8 +106,8 @@
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
     [self.collectionView reloadData];
-    [self performLayout]; // needed for iOS 5 & 6
 }
 
 #pragma mark - Layout
