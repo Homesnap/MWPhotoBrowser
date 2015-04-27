@@ -53,6 +53,7 @@
 @property (nonatomic) BOOL dontModifyStatusBar;
 @property (nonatomic) NSUInteger delayToHideElements;
 @property (nonatomic, readonly) NSUInteger currentIndex;
+@property (nonatomic, strong) NSArray * extraToolbarItems;
 
 // Init
 - (id)initWithDelegate:(id <MWPhotoBrowserDelegate>)delegate;

@@ -266,6 +266,11 @@
         [items addObject:flexSpace];
     }
 
+    // Extra Items - Add immediately to the left of the Action button
+    if (self.extraToolbarItems.count) {
+        [items addObjectsFromArray:self.extraToolbarItems];
+    }
+    
     // Right - Action
     if (_actionButton && !(!hasItems && !self.navigationItem.rightBarButtonItem)) {
         [items addObject:_actionButton];
@@ -1640,5 +1645,24 @@
     }
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+
+#pragma mark - Extra Toolbar Items
+
+- (void) setExtraToolbarItems:(NSArray *)extraToolbarItems {
+    // Strip out non-bar button items
+    NSMutableArray * onlyBarButtonItems = [NSMutableArray array];
+    [extraToolbarItems enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if ([obj isKindOfClass:[UIBarButtonItem class]]) {
+            [onlyBarButtonItems addObject:obj];
+        }
+    }];
+    _extraToolbarItems = [NSArray arrayWithArray:onlyBarButtonItems];
+
+    if ([self isViewLoaded]) {
+        [self performLayout];
+        [self.view setNeedsLayout];
+    }
+}
+
 
 @end
