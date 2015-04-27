@@ -89,7 +89,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSInteger rows = 7;
+    NSInteger rows = 8;
     @synchronized(_assets) {
         if (_assets.count) rows++;
     }
@@ -148,6 +148,10 @@
             cell.detailTextLabel.text = @"photos from device library";
             break;
         }
+        case 8: {
+            cell.textLabel.text = @"Library photos - Extra Buttons";
+            cell.detailTextLabel.text = @"device photos with extra buttons";
+        }
 		default: break;
 	}
     return cell;
@@ -166,6 +170,7 @@
     BOOL displayActionButton = YES;
     BOOL displaySelectionButtons = NO;
     BOOL displayNavArrows = NO;
+    BOOL displayExtraActionButtons = NO;
     BOOL enableGrid = YES;
     BOOL startOnGrid = NO;
 	switch (indexPath.row) {
@@ -1018,7 +1023,9 @@
             // Options
             startOnGrid = YES;
 			break;
-		case 7: {
+		case 8:
+            displayExtraActionButtons = YES;
+        case 7: {
             @synchronized(_assets) {
                 NSMutableArray *copy = [_assets copy];
                 for (ALAsset *asset in copy) {
@@ -1048,6 +1055,12 @@
     browser.enableSwipeToDismiss = YES;
     [browser setCurrentPhotoIndex:0];
     
+    // Create extra Action Tool bar buttons
+    if (displayExtraActionButtons) {
+        UIBarButtonItem * extraButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(fakeAddButtonTapped:)];
+        browser.extraToolbarItems = @[extraButton];
+    }
+
     // Reset selections
     if (displaySelectionButtons) {
         _selections = [NSMutableArray new];
@@ -1208,6 +1221,13 @@
         
     });
     
+}
+
+#pragma mark - Actions
+
+- (IBAction)fakeAddButtonTapped:(id)sender {
+    UIAlertView * alertView = [[UIAlertView alloc] initWithTitle:@"Extra Button Tapped" message:@"Some Real Action should have happeneded here" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [alertView show];
 }
 
 @end
