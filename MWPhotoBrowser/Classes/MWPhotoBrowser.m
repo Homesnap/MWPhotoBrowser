@@ -1406,6 +1406,10 @@
     }
 }
 
+- (id<MWPhoto>) currentPhoto {
+    return [self photoAtIndex:_currentPageIndex];
+}
+
 #pragma mark - Misc
 
 - (void)doneButtonPressed:(id)sender {

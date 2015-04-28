@@ -54,6 +54,7 @@
 @property (nonatomic) NSUInteger delayToHideElements;
 @property (nonatomic, readonly) NSUInteger currentIndex;
 @property (nonatomic, strong) NSArray * extraToolbarItems;
+@property (nonatomic, readonly) id<MWPhoto> currentPhoto;
 
 // Init
 - (id)initWithDelegate:(id <MWPhotoBrowserDelegate>)delegate;
