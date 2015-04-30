@@ -186,14 +186,22 @@
     
     // Swipe to dismiss
     if (_enableSwipeToDismiss) {
-        UISwipeGestureRecognizer *swipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(doneButtonPressed:)];
-        swipeGesture.direction = UISwipeGestureRecognizerDirectionDown | UISwipeGestureRecognizerDirectionUp;
+        UIPanGestureRecognizer *swipeGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeToDismiss:)];
         [self.view addGestureRecognizer:swipeGesture];
     }
     
-	// Super
+    // Super
     [super viewDidLoad];
-	
+    
+}
+
+- (void)handleSwipeToDismiss:(UIPanGestureRecognizer *)recognizer {
+    CGPoint translation = [recognizer translationInView:recognizer.view];
+    CGPoint velocity = [recognizer velocityInView:recognizer.view];
+    
+    if (translation.y > 150 && translation.y > fabs(translation.x) && velocity.y > 1500) {
+        [self doneButtonPressed:recognizer];
+    }
 }
 
 - (void)performLayout {
