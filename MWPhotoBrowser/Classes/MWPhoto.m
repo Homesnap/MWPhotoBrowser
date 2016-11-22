@@ -182,11 +182,9 @@
             
         }
         
-    } else {
-        
+    } else {        
         // Failed - no source
-        @throw [NSException exceptionWithName:nil reason:nil userInfo:nil];
-        
+        @throw [NSException exceptionWithName:@"MWPhotoBrowserException" reason:@"No photo source" userInfo:nil];
     }
 }
 

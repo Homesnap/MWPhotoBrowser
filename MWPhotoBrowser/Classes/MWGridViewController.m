@@ -11,56 +11,13 @@
 #import "MWPhotoBrowserPrivate.h"
 #import "MWCommon.h"
 
-@interface MWGridViewController () {
-    
-    // Store margins for current setup
-    CGFloat _margin, _gutter, _marginL, _gutterL, _columns, _columnsL;
-    
-}
-
-@end
-
 @implementation MWGridViewController
 
 - (id)init {
     if ((self = [super initWithCollectionViewLayout:[UICollectionViewFlowLayout new]])) {
-        
-        // Defaults
-        _columns = 3, _columnsL = 4;
-        _margin = 0, _gutter = 1;
-        _marginL = 0, _gutterL = 1;
-        
-        // For pixel perfection...
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            // iPad
-            _columns = 6, _columnsL = 8;
-            _margin = 1, _gutter = 2;
-            _marginL = 1, _gutterL = 2;
-        } else if ([UIScreen mainScreen].bounds.size.height == 480) {
-            // iPhone 3.5 inch
-            _columns = 1, _columnsL = 4;
-            _margin = 0, _gutter = 1;
-            _marginL = 1, _gutterL = 2;
-        } else if([UIScreen mainScreen].bounds.size.height == 667) {
-            // iPhone 6
-            _columns = 1, _columnsL = 4;
-            _margin = 0, _gutter = 1;
-            _marginL = 1, _gutterL = 2;
-        } else if([UIScreen mainScreen].bounds.size.height == 736) {
-            // iPHone 6+
-            _columns = 1, _columnsL = 4;
-            _margin = 0, _gutter = 1;
-            _marginL = 1, _gutterL = 2;
-        } else {
-            // iPhone 4 inch
-            _columns = 1, _columnsL = 4;
-            _margin = 0, _gutter = 1;
-            _marginL = 0, _gutterL = 2;
-        }
-        
-        _initialContentOffset = CGPointMake(0, CGFLOAT_MAX);
-        
+        _initialContentOffset = CGPointMake(0, CGFLOAT_MAX);        
     }
+    
     return self;
 }
 
@@ -105,35 +62,21 @@
     self.collectionView.contentInset = UIEdgeInsetsMake(navBar.frame.origin.y + navBar.frame.size.height + [self getGutter] + yAdjust, 0, 0, 0);
 }
 
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-    [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    
+    [self.collectionView.collectionViewLayout invalidateLayout];
     [self.collectionView reloadData];
 }
 
 #pragma mark - Layout
 
-- (CGFloat)getColumns {
-    if ((UIInterfaceOrientationIsPortrait(self.interfaceOrientation))) {
-        return _columns;
-    } else {
-        return _columnsL;
-    }
-}
-
 - (CGFloat)getMargin {
-    if ((UIInterfaceOrientationIsPortrait(self.interfaceOrientation))) {
-        return _margin;
-    } else {
-        return _marginL;
-    }
+    return 1.0f;
 }
 
 - (CGFloat)getGutter {
-    if ((UIInterfaceOrientationIsPortrait(self.interfaceOrientation))) {
-        return _gutter;
-    } else {
-        return _gutterL;
-    }
+    return 1.0f;
 }
 
 #pragma mark - Collection View
@@ -144,9 +87,6 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     MWGridCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"GridCell" forIndexPath:indexPath];
-    if (!cell) {
-        cell = [[MWGridCell alloc] init];
-    }
     id <MWPhoto> photo = [_browser thumbPhotoAtIndex:indexPath.row];
     cell.photo = photo;
     cell.gridController = self;
@@ -172,9 +112,23 @@
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    CGFloat columns = ^{
+        if (self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact) {
+            if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
+                // Portrait iPhone / Compact Split iPad
+                return 1;
+            } else {
+                // Landscape iPhone
+                return 4;
+            }
+        } else {
+            return 6;
+        }
+    }();
+    
+    
     CGFloat margin = [self getMargin];
     CGFloat gutter = [self getGutter];
-    CGFloat columns = [self getColumns];
     CGFloat value = floorf(((self.view.bounds.size.width - (columns - 1) * gutter - 2 * margin) / columns));
     return CGSizeMake(value, value);
 }
