@@ -982,9 +982,19 @@
 
 - (CGRect)frameForToolbarAtOrientation:(UIInterfaceOrientation)orientation {
     CGFloat height = 44;
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone &&
-        UIInterfaceOrientationIsLandscape(orientation)) height = 32;
-	return CGRectIntegral(CGRectMake(0, self.view.bounds.size.height - height, self.view.bounds.size.width, height));
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && UIInterfaceOrientationIsLandscape(orientation)) {
+        height = 32;
+    }
+    CGFloat adjust = 0;
+
+    // iPhone X toolbar layout fix
+    // https://github.com/mwaterfall/MWPhotoBrowser/issues/618
+    if (@available(iOS 11.0, *)) {
+        UIEdgeInsets safeArea = [[UIApplication sharedApplication] keyWindow].safeAreaInsets;
+        adjust = safeArea.bottom;
+    }
+
+    return CGRectIntegral(CGRectMake(0, self.view.bounds.size.height - height - adjust, self.view.bounds.size.width, height));
 }
 
 - (CGRect)frameForCaptionView:(MWCaptionView *)captionView atIndex:(NSUInteger)index {
