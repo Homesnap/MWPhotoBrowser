@@ -19,7 +19,7 @@
 #define MWLog(x, ...)
 #endif
 
-@class MWPhotoBrowser;
+@class MWPhotoBrowser, MWGridViewController;
 
 @protocol MWPhotoBrowserDelegate <NSObject>
 
@@ -55,6 +55,7 @@
 @property (nonatomic, readonly) NSUInteger currentIndex;
 @property (nonatomic, strong) NSArray * extraToolbarItems;
 @property (nonatomic, readonly) id<MWPhoto> currentPhoto;
+@property (nonatomic, strong) MWGridViewController *gridController;
 
 // Init
 - (id)initWithDelegate:(id <MWPhotoBrowserDelegate>)delegate;
@@ -68,5 +69,6 @@
 // Navigation
 - (void)showNextPhotoAnimated:(BOOL)animated;
 - (void)showPreviousPhotoAnimated:(BOOL)animated;
+- (void)showGrid:(BOOL)animated;
 
 @end
