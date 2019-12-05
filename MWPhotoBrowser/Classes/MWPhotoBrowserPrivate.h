@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MBProgressHUD.h"
 #import "MWGridViewController.h"
 #import "MWZoomingScrollView.h"
+
+@import MBProgressHUD;
 
 // Declare private methods of browser
 @interface MWPhotoBrowser () {
